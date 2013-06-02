@@ -31,7 +31,7 @@ fi
 #Init
 if [ ! -f /etc/init.d/couchpotato ]; then
  my_msg "Adding couchpotato init script"
- cp /vagrant/couchpotato.init /etc/init.d/couchpotato
+ cp /opt/couchpotato/init/ubuntu /etc/init.d/couchpotato
  chmod +x /etc/init.d/couchpotato
  update-rc.d couchpotato defaults
  my_msg "Starting couchpotato"
