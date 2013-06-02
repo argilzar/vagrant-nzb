@@ -42,12 +42,22 @@
 <p>You need <a href="https://www.virtualbox.org/wiki/Downloads">Virtualbox</a> and <a href="http://www.vagrantup.com/">Vagrant</a></p>
 
 <h3>
-<a name="quickstart-linux" class="anchor" href="#quickstart-linux"><span class="octicon octicon-link"></span></a>Quickstart linux</h3>
+<a name="quickstart" class="anchor" href="#quickstart"><span class="octicon octicon-link"></span></a>Quickstart</h3>
+
+<p>Use this method if you are not changing any of the default options.</p>
 
 <pre><code>$ git clone https://github.com/argilzar/vagrant-nzb.git
 $ cd vagrant-nzb
 $ vagrant up
 </code></pre>
+
+<p>Vagrant will create the boxes spin them up. The first time it runs it may take some time as the <a href="http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box">default box image</a> needs to be downloaded. You can then open up the services in a browser</p>
+
+<ul>
+<li><a href="http://localhost:8080/">Sabnzb</a></li>
+<li><a href="http://localhost:8081/">Sickbeard</a></li>
+<li><a href="http://localhost:5050/">Couchpotato</a></li>
+</ul><p>You will need to do some config once the services have started. For SabNZB run the wizzard, downloads will be placed in (vagrant dir)/sabnzbdplus/Downloads/complete. For Sickbeard set the processing folder to /mnt/nzb/sabnzbdplus/Downloads/complete. </p>
       </section>
     </div>
 
