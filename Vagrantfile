@@ -53,4 +53,14 @@ Vagrant::Config.run do |config|
     couchpotato.vm.network :hostonly, "192.168.2.103"
     couchpotato.vm.share_folder "movies", "/media/video/Movies", "Videos/Movies", :create => true
   end
+
+  #Headphones server, config files
+  config.vm.define :headphones do |headphones|
+    headphones.vm.provision :shell, :path => "headphones.sh"
+    headphones.vm.forward_port 8181, 8181
+    headphones.vm.host_name = "headphones"
+    headphones.vm.network :hostonly, "192.168.2.104"
+    headphones.vm.share_folder "music", "/media/Music", "Music", :create => true
+  end
+
 end

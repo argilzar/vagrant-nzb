@@ -60,8 +60,8 @@ my_update_settings COUCHPOTATO_PRIVATE_IP `ifconfig eth1 | grep 'inet addr:' | g
 my_msg "Sourcing environment"
 source $ENVIRONMENT_FILE
 
-my_msg "Stopping couchpotato"
-/etc/init.d/couchpotato stop
+#my_msg "Stopping couchpotato"
+#/etc/init.d/couchpotato stop
 
 my_msg "Writing config for couchpotato"
 #Update ini file
@@ -69,8 +69,8 @@ my_msg "Writing config for couchpotato"
 #python /vagrant/config.py -i $COUCHPOTATO_INI -g sabnzbd -s category -v movies
 #python /vagrant/config.py -i $COUCHPOTATO_INI -g sabnzbd -s host -v "http://$SAB_PRIVATE_IP:$SAB_PORT"
 #python /vagrant/config.py -i $COUCHPOTATO_INI -g sabnzbd -s api_key -v "$SAB_API_KEY"
-my_msg "Starting again"
-/etc/init.d/couchpotato start
+#my_msg "Starting again"
+#/etc/init.d/couchpotato start
 my_msg "Done setting up couchpotato"
 #Provisioning succeeded
 exit 0
