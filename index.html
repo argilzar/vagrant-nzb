@@ -31,8 +31,8 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="what-is-it" class="anchor" href="#what-is-it"><span class="octicon octicon-link"></span></a>What is it?</h3>
+        <h1>
+<a name="vagrant-nzb" class="anchor" href="#vagrant-nzb"><span class="octicon octicon-link"></span></a>vagrant-nzb</h1>
 
 <p>vagrant-nzb is a tool that can help you setup <a href="https://www.virtualbox.org/wiki/Downloads">Virtualbox</a> boxes for the most popular usenet media tools. The goal of the project is to minimize the hassle it can be to set them all up individually and also to make them portable. The first version of the tool can to some extend manage this for <a href="http://sabnzbd.org/">SabNZBd</a>, <a href="http://sickbeard.com/">Sickbeard</a> and <a href="https://couchpota.to/">Couchpotato</a>. Although this project is aimed at using usenet for downloads you can use torrents or some other method instead.</p>
 
@@ -57,7 +57,15 @@ $ vagrant up
 <li><a href="http://localhost:8080/">Sabnzb</a></li>
 <li><a href="http://localhost:8081/">Sickbeard</a></li>
 <li><a href="http://localhost:5050/">Couchpotato</a></li>
-</ul><p>You will need to do some config once the services have started. For SabNZB run the wizzard, downloads will be placed in (vagrant dir)/sabnzbdplus/Downloads/complete. For Sickbeard set the processing folder to /mnt/nzb/sabnzbdplus/Downloads/complete. </p>
+<li><a href="http://localhost:8181/">Headphones</a></li>
+</ul><p>You will need to do some config once the services have started. For SabNZB run the wizzard. The sickbeard and headphones config will be partly updated with sabnzb info.</p>
+
+<h3>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h3>
+
+<p>Edit default options in config.sh and in the Vagrantfile. You can use VBoxManage or VirtualBox GUI to change properties of the machines, the default ones are set up using 512 MB and one processor.</p>
+
+<p>See also <a href="http://argilzar.github.io/vagrant-nzb/">http://argilzar.github.io/vagrant-nzb/</a></p>
       </section>
     </div>
 
