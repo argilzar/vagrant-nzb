@@ -9,6 +9,7 @@ Vagrant::Config.run do |config|
   #Default location for all the setting files, incomplete downloads and cache
   #You can not omit this unless you change the defaults in the provisioning scripts
   #The mount point should be /mnt/nzb always
+  #If you do not change this then nzb folder will be created in current dir
   config.vm.share_folder "nzb", "/mnt/nzb", "nzb", :create => true
 
   #sabnzbdpluss
