@@ -49,6 +49,9 @@ if [ ! -f /etc/init.d/sickbeard ]; then
  /etc/init.d/sickbeard start > /dev/null 2>&1
  my_msg "Stop the daemon and write the new config"
  my_update_settings SB_OPTS " --config=$SICKBEARD_INI" $SICKBEARD_CONFIG_FILE
+else
+ #Otherwise we overwrite our own settings
+ cat $SICKBEARD_INI > $SICKBEARD_ORIGINAL_INI
 fi
 
 
