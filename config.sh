@@ -19,6 +19,7 @@ SICKBEARD_INI="$SICKBEARD_DATA/my.config.ini"
 SICKBEARD_CONFIG_FILE="/etc/default/sickbeard"
 SICKBEARD_HOST="0.0.0.0"
 SICKBEARD_PORT="8081"
+SICKBEARD_UPDATE_COMPLETE_DIR="1"
 
 #Couchpotato
 COUCHPOTATO_SOURCE_REPO="https://github.com/RuudBurger/CouchPotatoServer.git"
@@ -45,7 +46,7 @@ function my_check_install {
 
 function my_update_settings {
  sed -i "/$1/d" $3 > /dev/null
- echo "$1=$2" >> $3
+ echo "$1=\"$2\"" >> $3
 }
 
 #Check for nzb mount, this needs to be present

@@ -35,7 +35,7 @@ if [ ! -f /etc/init.d/sickbeard ]; then
  my_msg "Starting sickbeard daemon"
  /etc/init.d/sickbeard start > /dev/null 2>&1
  my_msg "Stop the daemon and write the new config"
- my_update_settings SB_OPTS "\" --config=$SICKBEARD_INI\"" $SICKBEARD_CONFIG_FILE
+ my_update_settings SB_OPTS " --config=$SICKBEARD_INI" $SICKBEARD_CONFIG_FILE
 fi
 
 
@@ -47,6 +47,7 @@ source $ENVIRONMENT_FILE
 python /vagrant/config.py -i $SICKBEARD_ORIGINAL_INI -g General -s nzb_method -v sabnzbd
 python /vagrant/config.py -i $SICKBEARD_ORIGINAL_INI -g SABnzbd -s sab_host -v "\"http://$SAB_PRIVATE_IP:$SAB_PORT/\""
 python /vagrant/config.py -i $SICKBEARD_ORIGINAL_INI -g SABnzbd -s sab_apikey -v "\"$SAB_API_KEY\""
+[ $SICKBEARD_UPDATE_COMPLETE_DIR -eq "1" ] && python /vagrant/config.py -i $SICKBEARD_ORIGINAL_INI -g General -s tv_download_dir -v "\"$SAB_COMPLETE_DIR\""
 #Remove all empty lines sickbeard doesnt like them for some reason
 sed '/^$/d' $SICKBEARD_ORIGINAL_INI > $SICKBEARD_INI
 my_msg "restarting sickbeard"

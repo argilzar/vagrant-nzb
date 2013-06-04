@@ -33,6 +33,12 @@ my_update_settings PORT $SAB_PORT $SAB_CONFIG_FILE
 #Write info for other services
 my_update_settings SAB_PRIVATE_IP `ifconfig eth1 | grep 'inet addr:' | grep -v '127.0.0.1' | cut -d: -f2 | egrep "[0-9\.]+" -o` $ENVIRONMENT_FILE
 my_update_settings SAB_API_KEY `cat $SAB_INI | egrep -o "^api_key\s?\=\s?([a-z0-9]+)" | cut  -d"=" -f2 |  tr -d ' '` $ENVIRONMENT_FILE
+COMPLETE_DIR=`cat $SAB_INI | egrep -o "^complete_dir\s?\=\s?(.*)" | cut  -d"=" -f2 | tr -d ' '`
+if [ "$(echo $COMPLETE_DIR | head -c 1)" = "/" ];then
+ my_update_settings SAB_COMPLETE_DIR $COMPLETE_DIR $ENVIRONMENT_FILE
+else
+ my_update_settings SAB_COMPLETE_DIR "$(dirname $SAB_INI)/$COMPLETE_DIR" $ENVIRONMENT_FILE
+fi
 
 my_msg "Done setting up sabnzb"
 
