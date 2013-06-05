@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-Vagrant::Config.run do |config|
+Vagrant.configure("1") do |config|
   #The ubuntu cloud image, will be downloaded for the first box
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
   config.vm.box = "raring-amd64-vagrant"
@@ -63,4 +63,19 @@ Vagrant::Config.run do |config|
     headphones.vm.share_folder "music", "/media/Music", "Music", :create => true
   end
 
+  #Custom newznab server nZEDb
+  config.vm.define :nzedb do |nzedb|
+    nzedb.vm.provision :shell, :path => "nzedb.sh"
+    nzedb.vm.forward_port 80, 10080
+    nzedb.vm.host_name = "nzedb"
+    nzedb.vm.network :hostonly, "192.168.2.105"
+  end
+
+end
+
+Vagrant.configure("2") do |config|
+  config.vm.provider "virtualbox" do |v|
+   #Set to true to debug boot issues if you are in an X environment
+   v.gui = false
+  end
 end

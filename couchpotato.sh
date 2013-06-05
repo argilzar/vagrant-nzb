@@ -22,9 +22,10 @@ source /vagrant/config.sh
 #Make dir for configs and stuff
 if [ ! -d $COUCHPOTATO_DATA ]; then
  mkdir $COUCHPOTATO_DATA
+ my_msg "Created couchpotato data_dir: $COUCHPOTATO_DATA"
  chown -R $COUCHPOTATO_USER:$COUCHPOTATO_USER $COUCHPOTATO_DATA
- ln -s $COUCHPOTATO_DATA /home/vagrant/.couchpotato
- chown -R $COUCHPOTATO_USER:$COUCHPOTATO_USER /home/vagrant/.couchpotato
+ #ln -s $COUCHPOTATO_DATA /home/vagrant/.couchpotato
+ #chown -R $COUCHPOTATO_USER:$COUCHPOTATO_USER /home/vagrant/.couchpotato
 fi
 
 [ -f $COUCHPOTATO_CONFIG_FILE ] || touch $COUCHPOTATO_CONFIG_FILE

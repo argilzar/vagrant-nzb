@@ -58,6 +58,21 @@ COUCHPOTATO_CONFIG_FILE="/etc/default/couchpotato"
 COUCHPOTATO_HOST="0.0.0.0"
 COUCHPOTATO_PORT="5050"
 
+#nZEDb newznab clone
+NZEDB_SOURCE_REPO="https://github.com/nZEDb/nZEDb.git"
+NZEDB_INSTALL="/var/www/nZEDb"
+NZEDB_USER="vagrant"
+NZEDB_DATA="$DATA_DIR/nzedb"
+NZEDB_CONFIG_FILE="/etc/default/sickbeard"
+NZEDB_HOST="0.0.0.0"
+NZEDB_PORT="445"
+#Set to 1 to install mysql also, I recomend using another server for this
+NZEDB_HAS_MYSQL="0"
+NZEDB_MYSQL_HOST="192.168.1.188"
+NZEDB_MYSQL_USER="nzedb"
+NZEDB_MYSQL_PASS="nzedb"
+NZEDB_MYSQL_DB="nzedb"
+
 function my_msg {
   echo "[$SCRIPT] $1" 
 }
