@@ -78,12 +78,12 @@ function my_msg {
 }
 
 function my_check_install {
- dpkg -l $1 > /dev/null 2>&1
- if [ $? == '0' ]; then
-  my_msg "$1 installed"
- else
+ #dpkg -l $1 > /dev/null 2>&1
+ #if [ $? == '0' ]; then
+ # my_msg "$1 installed"
+ #else
   apt-get -y -qq install $1
- fi
+ #fi
 }
 
 function my_update_settings {
