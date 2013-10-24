@@ -25,16 +25,18 @@ Vagrant.configure("1") do |config|
   #You can not omit this unless you change the defaults in the provisioning scripts
   #The mount point should be /mnt/nzb always
   #If you do not change this then nzb folder will be created in current dir
-  config.vm.share_folder "nzb", "/mnt/nzb", "nzb", :create => true
-
+  config.vm.share_folder "nzb", "/mnt/nzb", "nzb", :create => true #:nfs => true
+  #Path to tvshow folder, you can use any mapping here or remove it but sickbeard is setup per default to use /media/video/TV
+  config.vm.share_folder "tv", "/media/video/TV", "Videos/TV", :create => true #:nfs => true
+  config.vm.share_folder "movies", "/media/video/Movies", "Videos/Movies", :create => true 
+  config.vm.share_folder "music", "/media/Music", "Music", :create => true
+  
   #sabnzbdpluss
   config.vm.define :sabnzb do |sabnzb|
     sabnzb.vm.provision :shell, :path => "sabnzb.sh"
     sabnzb.vm.forward_port 8080, 8080
     sabnzb.vm.host_name = "sabnzb"
     sabnzb.vm.network :hostonly, "192.168.2.101"
-    
-    sabnzb.vm.share_folder "tv", "/media/video/TV", "/media/truecrypt8/Media/TV", :nfs => true
   end
 
   #Sickbeard server, config files
@@ -43,8 +45,6 @@ Vagrant.configure("1") do |config|
     sickbeard.vm.forward_port 8081, 8081
     sickbeard.vm.host_name = "sickbeard"
     sickbeard.vm.network :hostonly, "192.168.2.102"
-    #Path to tvshow folder, you can use any mapping here or remove it but sickbeard is setup per default to use /media/video/TV
-    sickbeard.vm.share_folder "tv", "/media/video/TV", "Videos/TV", :nfs => true
   end
 
   #Couchpotato server, config files
@@ -53,7 +53,6 @@ Vagrant.configure("1") do |config|
     couchpotato.vm.forward_port 5050, 5050
     couchpotato.vm.host_name = "couchpotato"
     couchpotato.vm.network :hostonly, "192.168.2.103"
-    couchpotato.vm.share_folder "movies", "/media/video/Movies", "Videos/Movies", :create => true
   end
 
   #Headphones server, config files
@@ -62,7 +61,6 @@ Vagrant.configure("1") do |config|
     headphones.vm.forward_port 8181, 8181
     headphones.vm.host_name = "headphones"
     headphones.vm.network :hostonly, "192.168.2.104"
-    headphones.vm.share_folder "music", "/media/Music", "Music", :create => true
   end
 
   #Custom newznab server nZEDb
