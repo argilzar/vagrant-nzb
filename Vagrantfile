@@ -33,6 +33,8 @@ Vagrant.configure("1") do |config|
     sabnzb.vm.forward_port 8080, 8080
     sabnzb.vm.host_name = "sabnzb"
     sabnzb.vm.network :hostonly, "192.168.2.101"
+    
+    sabnzb.vm.share_folder "tv", "/media/video/TV", "/media/truecrypt8/Media/TV", :nfs => true
   end
 
   #Sickbeard server, config files
@@ -42,7 +44,7 @@ Vagrant.configure("1") do |config|
     sickbeard.vm.host_name = "sickbeard"
     sickbeard.vm.network :hostonly, "192.168.2.102"
     #Path to tvshow folder, you can use any mapping here or remove it but sickbeard is setup per default to use /media/video/TV
-    sickbeard.vm.share_folder "tv", "/media/video/TV", "Videos/TV", :create => true
+    sickbeard.vm.share_folder "tv", "/media/video/TV", "Videos/TV", :nfs => true
   end
 
   #Couchpotato server, config files
@@ -69,6 +71,16 @@ Vagrant.configure("1") do |config|
     nzedb.vm.forward_port 80, 10080
     nzedb.vm.host_name = "nzedb"
     nzedb.vm.network :hostonly, "192.168.2.105"
+  end
+
+  #Mediatomb
+  #http://mediatomb.cc/
+  config.vm.define :mediatomb do |mediatomb|
+    mediatomb.vm.provision :shell, :path => "mediatomb.sh"
+    #mediatomb.vm.forward_port 58050, 58050
+    #mediatomb.vm.forward_port 58051, 58051
+    mediatomb.vm.host_name = "mediatomb"
+    mediatomb.vm.network :hostonly, "192.168.2.106"
   end
 
 end
