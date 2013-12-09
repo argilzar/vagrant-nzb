@@ -95,7 +95,6 @@ fi
 my_msg "Creating MySQL user and database"
 mysql -u root -e "create database nzedb default character set utf8"
 mysql -u root -e "grant all privileges on nzedb.* to nzedb@localhost identified by 'nzedb'"
-mysql -u root -e "revoke all privileges on nzedb.* to nzedb@'%'' identified by 'nzedb'"
 
 #Write info for other services
 my_update_settings NZEDB_PRIVATE_IP `ifconfig eth1 | grep 'inet addr:' | grep -v '127.0.0.1' | cut -d: -f2 | egrep "[0-9\.]+" -o` $ENVIRONMENT_FILE
