@@ -35,7 +35,7 @@ if [ "$NZEDB_HAS_MYSQL" = "1" ]; then
  export DEBIAN_FRONTEND=noninteractive
  apt-get install --assume-yes mysql-server
  unset DEBIAN_FRONTEND
- MYSQL_HOST=127.0.0.1 
+ MYSQL_HOST=127.0.0.1
 else
  MYSQL_HOST=$NZEDB_MYSQL_HOST
 fi
@@ -91,6 +91,11 @@ echo "<VirtualHost *:80>
  [ -f /etc/apache2/conf.d/name ] || echo "ServerName localhost" > /etc/apache2/conf.d/name
  service apache2 restart
 fi
+
+my_msg "Creating MySQL user and database"
+mysql -u root -e "create database nzedb default character set utf8"
+mysql -u root -e "grant all privileges on nzedb.* to nzedb@localhost identified by 'nzedb'"
+mysql -u root -e "revoke all privileges on nzedb.* to nzedb@'%'' identified by 'nzedb'"
 
 #Write info for other services
 my_update_settings NZEDB_PRIVATE_IP `ifconfig eth1 | grep 'inet addr:' | grep -v '127.0.0.1' | cut -d: -f2 | egrep "[0-9\.]+" -o` $ENVIRONMENT_FILE
