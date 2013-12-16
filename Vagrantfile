@@ -16,6 +16,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+#Set to false those services you dont need
+USE_SABNZBD=true
+USE_SICKBEARD=true
+USE_COUCHPOTATO=true
+USE_HEADPHONES=true
+USE_NZEDB=true
+USE_MEDIATOMB=true
+
+#In *nix it is better to use 
+USE_NFS=false
+
 Vagrant.configure("1") do |config|
   #The ubuntu cloud image, will be downloaded for the first box
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
@@ -25,60 +36,72 @@ Vagrant.configure("1") do |config|
   #You can not omit this unless you change the defaults in the provisioning scripts
   #The mount point should be /mnt/nzb always
   #If you do not change this then nzb folder will be created in current dir
-  config.vm.share_folder "nzb", "/mnt/nzb", "nzb", :create => true #:nfs => true
+  config.vm.share_folder "nzb", "/mnt/nzb", "nzb", :create => true, :nfs => USE_NFS
   #Path to tvshow folder, you can use any mapping here or remove it but sickbeard is setup per default to use /media/video/TV
-  config.vm.share_folder "tv", "/media/video/TV", "Videos/TV", :create => true #:nfs => true
-  config.vm.share_folder "movies", "/media/video/Movies", "Videos/Movies", :create => true 
-  config.vm.share_folder "music", "/media/Music", "Music", :create => true
+  config.vm.share_folder "tv", "/media/video/TV", "Videos/TV", :create => true, :nfs => USE_NFS
+  config.vm.share_folder "movies", "/media/video/Movies", "Videos/Movies", :create => true , :nfs => USE_NFS
+  config.vm.share_folder "music", "/media/Music", "Music", :create => true, :nfs => USE_NFS
   
   #sabnzbdpluss
-  config.vm.define :sabnzb do |sabnzb|
-    sabnzb.vm.provision :shell, :path => "sabnzb.sh"
-    sabnzb.vm.forward_port 8080, 8080
-    sabnzb.vm.host_name = "sabnzb"
-    sabnzb.vm.network :hostonly, "192.168.2.101"
+  if USE_SABNZBD
+   config.vm.define :sabnzb do |sabnzb|
+     sabnzb.vm.provision :shell, :path => "sabnzb.sh"
+     sabnzb.vm.forward_port 8080, 8080
+     sabnzb.vm.host_name = "sabnzb"
+     sabnzb.vm.network :hostonly, "192.168.2.101"
+   end
   end
 
   #Sickbeard server, config files
-  config.vm.define :sickbeard do |sickbeard|
-    sickbeard.vm.provision :shell, :path => "sickbeard.sh"
-    sickbeard.vm.forward_port 8081, 8081
-    sickbeard.vm.host_name = "sickbeard"
-    sickbeard.vm.network :hostonly, "192.168.2.102"
+  if USE_SICKBEARD
+    config.vm.define :sickbeard do |sickbeard|
+      sickbeard.vm.provision :shell, :path => "sickbeard.sh"
+      sickbeard.vm.forward_port 8081, 8081
+      sickbeard.vm.host_name = "sickbeard"
+      sickbeard.vm.network :hostonly, "192.168.2.102"
+    end
   end
 
   #Couchpotato server, config files
-  config.vm.define :couchpotato do |couchpotato|
-    couchpotato.vm.provision :shell, :path => "couchpotato.sh"
-    couchpotato.vm.forward_port 5050, 5050
-    couchpotato.vm.host_name = "couchpotato"
-    couchpotato.vm.network :hostonly, "192.168.2.103"
+  if USE_COUCHPOTATO
+    config.vm.define :couchpotato do |couchpotato|
+      couchpotato.vm.provision :shell, :path => "couchpotato.sh"
+      couchpotato.vm.forward_port 5050, 5050
+      couchpotato.vm.host_name = "couchpotato"
+      couchpotato.vm.network :hostonly, "192.168.2.103"
+    end
   end
 
   #Headphones server, config files
-  config.vm.define :headphones do |headphones|
-    headphones.vm.provision :shell, :path => "headphones.sh"
-    headphones.vm.forward_port 8181, 8181
-    headphones.vm.host_name = "headphones"
-    headphones.vm.network :hostonly, "192.168.2.104"
+  if USE_HEADPHONES
+    config.vm.define :headphones do |headphones|
+      headphones.vm.provision :shell, :path => "headphones.sh"
+      headphones.vm.forward_port 8181, 8181
+      headphones.vm.host_name = "headphones"
+      headphones.vm.network :hostonly, "192.168.2.104"
+    end
   end
 
   #Custom newznab server nZEDb
-  config.vm.define :nzedb do |nzedb|
-    nzedb.vm.provision :shell, :path => "nzedb.sh"
-    nzedb.vm.forward_port 80, 10080
-    nzedb.vm.host_name = "nzedb"
-    nzedb.vm.network :hostonly, "192.168.2.105"
+  if USE_NZEDB
+    config.vm.define :nzedb do |nzedb|
+      nzedb.vm.provision :shell, :path => "nzedb.sh"
+      nzedb.vm.forward_port 80, 10080
+      nzedb.vm.host_name = "nzedb"
+      nzedb.vm.network :hostonly, "192.168.2.105"
+    end
   end
 
   #Mediatomb
   #http://mediatomb.cc/
-  config.vm.define :mediatomb do |mediatomb|
-    mediatomb.vm.provision :shell, :path => "mediatomb.sh"
-    #mediatomb.vm.forward_port 58050, 58050
-    #mediatomb.vm.forward_port 58051, 58051
-    mediatomb.vm.host_name = "mediatomb"
-    mediatomb.vm.network :hostonly, "192.168.2.106"
+  if USE_MEDIATOMB
+    config.vm.define :mediatomb do |mediatomb|
+      mediatomb.vm.provision :shell, :path => "mediatomb.sh"
+      #mediatomb.vm.forward_port 58050, 58050
+      #mediatomb.vm.forward_port 58051, 58051
+      mediatomb.vm.host_name = "mediatomb"
+      mediatomb.vm.network :hostonly, "192.168.2.106"
+    end
   end
 
 end
