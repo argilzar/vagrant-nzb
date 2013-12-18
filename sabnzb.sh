@@ -41,7 +41,13 @@ my_update_settings HOST $SAB_HOST $SAB_CONFIG_FILE
 my_update_settings PORT $SAB_PORT $SAB_CONFIG_FILE
 
 #Restart to get new settings
-/etc/init.d/sabnzbdplus restart
+service sabnzbdplus status
+if [ $? -ne 0 ]; then
+    service sabnzbdplus start
+else
+	service sabnzbdplus stop
+	service sabnzbdplus start
+fi
 
 #Write info for other services
 my_update_settings SAB_PRIVATE_IP `ifconfig eth1 | grep 'inet addr:' | grep -v '127.0.0.1' | cut -d: -f2 | egrep "[0-9\.]+" -o` $ENVIRONMENT_FILE
