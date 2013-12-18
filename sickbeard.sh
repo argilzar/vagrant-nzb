@@ -67,8 +67,15 @@ python /vagrant/config.py -i $SICKBEARD_ORIGINAL_INI -g SABnzbd -s sab_apikey -v
 #Remove all empty lines sickbeard doesnt like them for some reason
 sed '/^$/d' $SICKBEARD_ORIGINAL_INI > $SICKBEARD_INI
 my_msg "restarting sickbeard"
-/etc/init.d/sickbeard stop  > /dev/null 2>&1
-/etc/init.d/sickbeard start  > /dev/null 2>&1
+
+service sickbeard status
+if [ $? -ne 0 ]; then
+    service sickbeard start
+else
+    service sickbeard stop
+    service sickbeard start
+fi
+
 my_msg "Done setting up sickbeard"
 #Provisioning succeeded
 exit 0
