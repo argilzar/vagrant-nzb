@@ -14,9 +14,27 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class couchpotato {
-	exec { 'Get couchpotato source':
+	exec { 'get-couchpotato-source':
 		cwd => '/mnt/nzb',
-		command => 'git clone https://github.com/RuudBurger/CouchPotatoServer.git couchpotato',
+		command => 'git clone git://github.com/RuudBurger/CouchPotatoServer.git couchpotato',
+		timeout => 0,
 		creates => '/mnt/nzb/couchpotato',
 	}
+
+	file { '/etc/init.d/couchpotato':
+		source => '/mnt/nzb/couchpotato/init/ubuntu',
+		require => Exec['get-couchpotato-source'],
+	}
+
+	file { '/etc/default/couchpotato':
+		source => 'puppet:///modules/couchpotato/couchpotato',
+		require => File['/etc/init.d/couchpotato'],
+	}
+
+	service { 'couchpotato':
+		ensure => running,
+		enable => true,
+		require => File['/etc/default/couchpotato'],
+	}
+
 }

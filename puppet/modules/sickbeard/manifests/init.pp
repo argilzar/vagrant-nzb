@@ -21,6 +21,7 @@ class sickbeard {
 	exec { 'get-sickbeard-source':
 		cwd => '/mnt/nzb',
 		command => 'git clone git://github.com/midgetspy/Sick-Beard.git sickbeard',
+		timeout => 0,
 		creates => '/mnt/nzb/sickbeard',
 	}
 

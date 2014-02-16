@@ -14,6 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class headphones {
+	notify{ 'Checking headphones': }
 	exec { 'Get headphones source':
 		cwd => '/mnt/nzb',
 		command => 'git clone https://github.com/rembo10/headphones.git headphones',

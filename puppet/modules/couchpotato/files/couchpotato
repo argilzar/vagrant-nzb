@@ -1,0 +1,7 @@
+CP_USER=vagrant #$RUN_AS, username to run couchpotato under, the default is couchpotato
+CP_HOME=/mnt/nzb/couchpotato #$APP_PATH, the location of couchpotato.py, the default is /opt/couchpotato
+CP_DATA=/mnt/nzb/couchpotato #$DATA_DIR, the location of couchpotato.db, cache, logs, the default is /var/couchpotato
+## CP_PIDFILE= #$PID_FILE, the location of couchpotato.pid, the default is /var/run/couchpotato.pid
+## PYTHON_BIN= #$DAEMON, the location of the python binary, the default is /usr/bin/python
+CP_OPTS=" --config_file=/mnt/nzb/couchpotato/couchpotato.ini" #$EXTRA_DAEMON_OPTS, extra cli option for couchpotato, i.e. " --config_file=/home/couchpotato/couchpotato.ini"
+## SSD_OPTS= #$EXTRA_SSD_OPTS, extra start-stop-daemon option like " --group=users"
