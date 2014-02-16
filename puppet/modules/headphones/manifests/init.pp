@@ -14,12 +14,29 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class headphones {
-	notify{ 'Checking headphones': }
-	exec { 'Get headphones source':
+	exec { 'get-headphones-source':
 		cwd => '/mnt/nzb',
-		command => 'git clone https://github.com/rembo10/headphones.git headphones',
+		command => 'git clone git://github.com/rembo10/headphones.git headphones',
+		timeout => 0,
 		creates => '/mnt/nzb/headphones',
 	}
+
+	file { '/etc/init.d/headphones':
+		source => '/mnt/nzb/headphones/init.ubuntu',
+		require => Exec['get-headphones-source'],
+	}
+
+	file { '/etc/default/headphones':
+		source => 'puppet:///modules/headphones/headphones',
+		require => File['/etc/init.d/headphones'],
+	}
+
+	service { 'headphones':
+		ensure => running,
+		enable => true,
+		require => File['/etc/default/headphones'],
+	}
+
 
 
 }
