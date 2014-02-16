@@ -1,13 +1,27 @@
 class sabnzbd {
-	exec { 'Enable multiverse':
-		cwd => '/mnt/nzb',
-		command => 'sed -i "/^# deb.*multiverse/ s/^# //" /etc/apt/sources.list && apt-get update -qq && touch /mnt/nzb/.multiverse',
-		creates => '/mnt/nzb/.multiverse',
+	file { '/etc/apt/sources.list.d/multiverse.list':
+		source => 'puppet:///modules/sabnzbd/multiverse.list',
+	}
+
+	file { '/etc/default/sabnzbdplus':
+		source => 'puppet:///modules/sabnzbd/sabnzbdplus',
+		require => Package['sabnzbdplus'],
+	}
+
+	exec {'apt-get update':
+		command => 'apt-get -qq update',
+		require => File['/etc/apt/sources.list.d/multiverse.list'],
 	}
 
 	package { 'sabnzbdplus' :
 		ensure => latest,
-		require => Exec['Enable multiverse'],
+		require => Exec['apt-get update'],
+	}
+
+	service { 'sabnzbdplus':
+		ensure => running,
+		enable => true,
+		require => File['/etc/default/sabnzbdplus'],
 	}
 
 }
