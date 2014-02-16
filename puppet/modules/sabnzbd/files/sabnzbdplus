@@ -1,3 +1,6 @@
+#This file is handeled by puppet and should not be changed on the VM
+#You can change the the source file in puppet/modules/sabnzbd/files/sabnzbdplus
+#The provision the VM again
 # This file is sourced by /etc/init.d/sabnzbdplus
 #
 # When SABnzbd+ is started using the init script, the
@@ -14,7 +17,7 @@ USER=vagrant
 # [optional] full path to the configuration file of your choice;
 #            otherwise, the default location (in $USER's home
 #            directory) is used:
-CONFIG=
+CONFIG=/mnt/nzb/sabnzbdplus/config.ini
 
 # [optional] hostname/ip and port number to listen on:
 HOST=0.0.0.0

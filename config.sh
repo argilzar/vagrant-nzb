@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2013 Brian Bischoff <admin@argilzar.com>
+# Copyright 2013-2014 Brian Bischoff <admin@argilzar.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
