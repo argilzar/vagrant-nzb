@@ -15,33 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#Set to false those services you dont need
-USE_NZEDB=false
-USE_MEDIATOMB=false
-#These can be combined into one box
-USE_SABNZBD=true
-USE_SICKBEARD=true
-USE_COUCHPOTATO=true
-USE_HEADPHONES=true
-
-#Combine sabnzb,sickbeard,couchpotato and headephones into one box
-#Note you still need to activate each service you need, default is all enabled
-USE_COMBINED=true
+require './vagrant-config'
 
 Vagrant.configure("2") do |config|
   #The ubuntu cloud image, will be downloaded for the first box
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
   config.vm.box = "raring-amd64-vagrant"
   
-  #Default location for all the setting files, incomplete downloads and cache
-  #You can not omit this unless you change the defaults in the provisioning scripts
-  #The mount point should be /mnt/nzb always
-  #If you do not change this then nzb folder will be created in current dir
-  config.vm.synced_folder "nzb", "/mnt/nzb", :create => true
-  #Path to tvshow folder, you can use any mapping here or remove it but sickbeard is setup per default to use /media/video/TV
-  config.vm.synced_folder "Videos/TV", "/media/video/TV",:create => true
-  config.vm.synced_folder "Videos/Movies", "/media/video/Movies", :create => true
-  config.vm.synced_folder "Music", "/media/Music", :create => true
+  config.vm.synced_folder CONFIG_PATH, VM_CONFIG_PATH, :create => true
+  config.vm.synced_folder TV_PATH, VM_TV_PATH,:create => true
+  config.vm.synced_folder MOVIES_PATH, VM_MOVIES_PATH, :create => true
+  config.vm.synced_folder MUSIC_PATH, VM_MUSIC_PATH, :create => true
   
 
   if USE_COMBINED
@@ -65,7 +49,23 @@ Vagrant.configure("2") do |config|
           "use_sickbeard" => USE_SICKBEARD,
           "use_couchpotato" => USE_COUCHPOTATO,
           "use_headphones" => USE_HEADPHONES,
+          "config_path" => CONFIG_PATH, 
+          "vm_config_path" => VM_CONFIG_PATH,
+          "tv_path" => TV_PATH, 
+          "vm_tv_path" => VM_TV_PATH,
+          "movies_path" => MOVIES_PATH,
+          "vm_movies_path" => VM_MOVIES_PATH,
+          "music_path" => MUSIC_PATH,
+          "vm_music_path" => VM_MUSIC_PATH
          }
+      end
+      combined.vm.provider "virtualbox" do |v|
+        v.memory = VM_MEMORY
+        v.gui = VM_GUI
+        v.customize ["modifyvm", :id, "--cpus", VM_CPU_COUNT]
+        if VM_EXEC_CAP > 0
+          v.customize ["modifyvm", :id, "--cpuexecutioncap", VM_EXEC_CAP]
+        end
       end
     end 
   else
