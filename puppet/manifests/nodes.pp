@@ -28,19 +28,19 @@ node 'combined' {
     	host_aliases => ['combined']
 	}
 
-	if $use_sabnzbd {
+	if $use_sabnzbd == 'true' {
 		include sabnzbd
 	}
 
-	if $use_sickbeard {
+	if $::use_sickbeard == 'true'  {
 		include sickbeard
 	}
 
-	if $use_couchpotato {
+	if $::use_couchpotato == 'true' {
 		include couchpotato
 	}
 
-	if $use_headphones {
+	if $::use_headphones == 'true' {
 		include headphones
 	}	
 
