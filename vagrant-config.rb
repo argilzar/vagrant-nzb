@@ -31,3 +31,10 @@ VM_MEMORY=512 #Memory in MB
 VM_CPU_COUNT=1 #Number of cpus
 VM_GUI=false # gui boot, usefull if there are network problems
 VM_EXEC_CAP=0 #0-100 cpu execution cap 0 to disable
+
+#nzedb Config
+NZEDB_USE_LOCAL_MYSQL=true
+NZEDB_VM_MEMORY=2048 #Memory in MB
+NZEDB_VM_CPU_COUNT=2 #Number of cpus
+NZEDB_VM_GUI=false # gui boot, usefull if there are network problems
+NZEDB_VM_EXEC_CAP=0 #0-100 cpu execution cap 0 to disable
