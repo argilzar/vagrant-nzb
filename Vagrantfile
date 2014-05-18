@@ -15,6 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+if !File.exist?('./vagrant-config')
+   FileUtils.cp('./vagrant-config-sample.rb', './vagrant-config.rb')
+end 
+
 require './vagrant-config'
 
 Vagrant.configure("2") do |config|
@@ -113,11 +118,46 @@ Vagrant.configure("2") do |config|
   #Custom newznab server nZEDb
   if USE_NZEDB
     config.vm.define :nzedb do |nzedb|
-      nzedb.vm.provision :shell, :path => "nzedb.sh"
+      nzedb.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+      nzedb.vm.box = "raring-amd64-vagrant"     
       nzedb.vm.network "forwarded_port", guest: 80, host: 10080
+      #nzedb.vm.network :hostonly, "192.168.2.110"
       nzedb.vm.host_name = "nzedb"
-      nzedb.vm.network :hostonly, "192.168.2.105"
+      nzedb.vm.provision :puppet do |puppet|
+        puppet.manifests_path = "puppet/manifests"
+        puppet.module_path = "puppet/modules"
+        puppet.manifest_file  = "site.pp"
+        puppet.facter = { 
+          "fqdn" => "nzedb.localhost", 
+          "hostname" => "nzedb", 
+          "config_path" => CONFIG_PATH, 
+          "vm_config_path" => VM_CONFIG_PATH,
+          "tv_path" => TV_PATH, 
+          "vm_tv_path" => VM_TV_PATH,
+          "movies_path" => MOVIES_PATH,
+          "vm_movies_path" => VM_MOVIES_PATH,
+          "music_path" => MUSIC_PATH,
+          "vm_music_path" => VM_MUSIC_PATH
+         }
+      end
+      nzedb.vm.provider "virtualbox" do |v|
+        v.memory = NZEDB_VM_MEMORY
+        v.gui = NZEDB_VM_GUI
+        v.customize ["modifyvm", :id, "--cpus", NZEDB_VM_CPU_COUNT]
+        if NZEDB_VM_EXEC_CAP > 0
+          v.customize ["modifyvm", :id, "--cpuexecutioncap", NZEDB_VM_EXEC_CAP]
+        end
+      end
     end
+
+
+
+    #config.vm.define :nzedb do |nzedb|
+    #  nzedb.vm.provision :shell, :path => "nzedb.sh"
+    #  nzedb.vm.network "forwarded_port", guest: 80, host: 10080
+    #  nzedb.vm.host_name = "nzedb"
+    #  nzedb.vm.network :hostonly, "192.168.2.105"
+    #end
   end
 
   #Mediatomb
