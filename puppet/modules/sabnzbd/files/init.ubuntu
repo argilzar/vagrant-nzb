@@ -1,0 +1,106 @@
+#!/bin/sh
+#
+### BEGIN INIT INFO
+# Provides:          sabnzbdplus
+# Required-Start:    $local_fs $network $remote_fs
+# Required-Stop:     $local_fs $network $remote_fs
+# Should-Start:      $NetworkManager
+# Should-Stop:       $NetworkManager
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts instance of SABnzbd
+# Description:       starts instance of SABnzbd using start-stop-daemon
+### END INIT INFO
+
+# Script name
+NAME=sabnzbdplus
+# App name
+DESC=sabnzbdplus
+
+## The defaults
+# Run as username
+RUN_AS=vagrant
+APP_PATH=/mnt/nzb/sabnzbdplus
+PID_FILE=/var/run/sabnzbdplus/sabnzbdplus.pid
+DAEMON=/usr/bin/python
+EXTRA_DAEMON_OPTS=" --config-file=/mnt/nzb/sabnzbdplus/config.ini --server 0.0.0.0:8080"
+
+# Extra start-stop-daemon option like START_OPTS=" --group=users"
+EXTRA_SSD_OPTS=""
+##
+
+PID_PATH=`dirname $PID_FILE`
+DAEMON_OPTS=" SABnzbd.py -q -b 0 -l 0 --daemon --pidfile=${PID_FILE} ${EXTRA_DAEMON_OPTS}"
+
+##
+echo "TEST 1"
+test -x $DAEMON || exit 0
+
+
+# Create PID directory if not exist and ensure the sabnzbdplus user can write to it
+echo "TEST 1"
+if [ ! -d $PID_PATH ]; then
+    mkdir -p $PID_PATH
+    chown $RUN_AS $PID_PATH
+fi
+echo "TEST 2"
+if [ -e $PID_FILE ]; then
+    PID=`cat $PID_FILE`
+    if ! kill -0 $PID > /dev/null 2>&1; then
+        echo "Removing stale $PID_FILE"
+        rm $PID_FILE
+    fi
+fi
+echo "TEST 3"
+case "$1" in
+    start)
+        echo "Starting $DESC"
+        start-stop-daemon -d $APP_PATH -c $RUN_AS $EXTRA_SSD_OPTS --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
+        ;;
+
+    stop)
+        echo "Stopping $DESC"
+        start-stop-daemon --stop --pidfile $PID_FILE --retry 15
+        ;;
+
+    restart|force-reload)
+        echo "Restarting $DESC"
+        start-stop-daemon --stop --pidfile $PID_FILE --retry 15
+        start-stop-daemon -d $APP_PATH -c $RUN_AS $EXTRA_SSD_OPTS --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
+        ;;
+
+    status)
+        # Use LSB function library if it exists
+        if [ -f /lib/lsb/init-functions ]; then
+            . /lib/lsb/init-functions
+
+            if [ -e $PID_FILE ]; then
+                status_of_proc -p $PID_FILE "$DAEMON" "$NAME" && exit 0 || exit $?
+            else
+                log_daemon_msg "$NAME is not running"
+                exit 3
+            fi
+
+        else
+        # Use basic functions
+            if [ -e $PID_FILE ]; then
+                PID=`cat $PID_FILE`
+                if kill -0 $PID > /dev/null 2>&1; then
+                    echo " * $NAME is running"
+                    exit 0
+                fi
+            else
+                echo " * $NAME is not running"
+                exit 3
+            fi
+        fi
+        ;;
+
+    *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

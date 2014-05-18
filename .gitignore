@@ -1,0 +1,3 @@
+.vagrant/*
+nzb/
+vagrant-config.rb
