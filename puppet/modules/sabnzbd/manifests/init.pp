@@ -14,24 +14,25 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class sabnzbd {
-	file { '/etc/apt/sources.list.d/multiverse.list':
-		source => 'puppet:///modules/sabnzbd/multiverse.list',
+	#package { ["python-configobj","python-feedparser","python-dbus","python-openssl","python-support","python-yenc","par2","unrar","unzip"]:
+#		ensure => latest,
+#	}
+
+	exec { 'get-sabnzbdplus-source':
+		cwd => '/mnt/nzb',
+		command => 'git clone git://github.com/sabnzbd/sabnzbd.git sabnzbdplus',
+		timeout => 0,
+		creates => '/mnt/nzb/sabnzbdplus',
+	}
+
+	file { '/etc/init.d/sabnzbdplus':
+		source => 'puppet:///modules/sabnzbd/init.ubuntu',
+		require => Exec['get-sabnzbdplus-source'],
 	}
 
 	file { '/etc/default/sabnzbdplus':
 		source => 'puppet:///modules/sabnzbd/sabnzbdplus',
-		require => Package['sabnzbdplus'],
-	}
-
-	exec {'apt-get update':
-		command => 'apt-get -qq update',
-		require => File['/etc/apt/sources.list.d/multiverse.list'],
-		creates => '/usr/bin/sabnzbdplus',
-	}
-
-	package { 'sabnzbdplus' :
-		ensure => latest,
-		require => Exec['apt-get update'],
+		require => File['/etc/init.d/sabnzbdplus'],
 	}
 
 	service { 'sabnzbdplus':
@@ -39,5 +40,4 @@ class sabnzbd {
 		enable => true,
 		require => File['/etc/default/sabnzbdplus'],
 	}
-
 }

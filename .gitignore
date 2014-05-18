@@ -1,3 +1,5 @@
-.vagrant/*
+.vagrant/
 nzb/
 vagrant-config.rb
+Music/
+Videos/

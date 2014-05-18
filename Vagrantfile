@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if !File.exist?('./vagrant-config')
+if !File.exist?('./vagrant-config.rb')
    FileUtils.cp('./vagrant-config-sample.rb', './vagrant-config.rb')
 end 
 
