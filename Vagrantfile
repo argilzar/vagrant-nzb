@@ -118,28 +118,12 @@ Vagrant.configure("2") do |config|
   #Custom newznab server nZEDb
   if USE_NZEDB
     config.vm.define :nzedb do |nzedb|
-      nzedb.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
-      nzedb.vm.box = "raring-amd64-vagrant"     
+      nzedb.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/trusty/trusty-server-cloudimg-amd64-juju-vagrant-disk1.box"
+      nzedb.vm.box = "trusty-amd64-vagrant"     
       nzedb.vm.network "forwarded_port", guest: 80, host: 10080
       #nzedb.vm.network :hostonly, "192.168.2.110"
       nzedb.vm.host_name = "nzedb"
-      nzedb.vm.provision :puppet do |puppet|
-        puppet.manifests_path = "puppet/manifests"
-        puppet.module_path = "puppet/modules"
-        puppet.manifest_file  = "site.pp"
-        puppet.facter = { 
-          "fqdn" => "nzedb.localhost", 
-          "hostname" => "nzedb", 
-          "config_path" => CONFIG_PATH, 
-          "vm_config_path" => VM_CONFIG_PATH,
-          "tv_path" => TV_PATH, 
-          "vm_tv_path" => VM_TV_PATH,
-          "movies_path" => MOVIES_PATH,
-          "vm_movies_path" => VM_MOVIES_PATH,
-          "music_path" => MUSIC_PATH,
-          "vm_music_path" => VM_MUSIC_PATH
-         }
-      end
+      nzedb.vm.provision :shell, :path => "nzedb.sh"
       nzedb.vm.provider "virtualbox" do |v|
         v.memory = NZEDB_VM_MEMORY
         v.gui = NZEDB_VM_GUI
